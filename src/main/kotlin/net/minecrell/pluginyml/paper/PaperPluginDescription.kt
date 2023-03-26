@@ -53,7 +53,7 @@ class PaperPluginDescription(project: Project) : PluginDescription {
     @Input @Optional var prefix: String? = null
     @Input @Optional @JsonProperty("default-permission") var defaultPermission: Permission.Default? = null
     @Input @Optional var provides: List<String>? = null
-    @Input @Optional var libraries: List<String>? = null
+    @Input @Optional @JsonIgnore var libraries: List<String>? = null
 
     @Nested @Optional @JsonProperty("dependencies") @JsonSerialize(converter = PaperNamedDomainObjectCollectionConverter::class)
     var depends: NamedDomainObjectContainer<DependencyDefinition> = project.container(DependencyDefinition::class.java)
@@ -76,7 +76,6 @@ class PaperPluginDescription(project: Project) : PluginDescription {
         STARTUP,
         POSTWORLD
     }
-
     data class Command(@Input @JsonIgnore val name: String) {
         @Input @Optional var description: String? = null
         @Input @Optional var aliases: List<String>? = null
