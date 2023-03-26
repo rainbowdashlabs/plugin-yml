@@ -67,6 +67,7 @@ abstract class PlatformPlugin<T : PluginDescription>(private val platformName: S
                 if (description is PaperPluginDescription) {
                     generateReposClass.set(description.generateReposClass)
                     generateLibsClass.set(description.generateLibClass)
+                    packageName.set(description.generatedPackageName)
                 }
 
                 fileName.set(this@PlatformPlugin.fileName)

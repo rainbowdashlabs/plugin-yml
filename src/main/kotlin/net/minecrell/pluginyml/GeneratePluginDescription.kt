@@ -58,6 +58,8 @@ abstract class GeneratePluginDescription : DefaultTask() {
 
     @get:Input
     abstract val fileName: Property<String>
+    @get:Input
+    abstract val packageName: Property<String>
 
     @get:Input
     abstract val generateLibsClass: Property<Boolean>
@@ -132,7 +134,7 @@ abstract class GeneratePluginDescription : DefaultTask() {
                     .addStatement("return this.value")
                     .build()
             )
-            JavaFile.builder("net.minecrell.pluginyml", typeSpec.build())
+            JavaFile.builder(packageName.getOrElse("net.minecrell.pluginyml"), typeSpec.build())
                 .build()
                 .writeTo(outputSourceDirectory.get().asFile)
         }
@@ -177,7 +179,7 @@ abstract class GeneratePluginDescription : DefaultTask() {
                         .addStatement("return this.value")
                         .build()
                 )
-                JavaFile.builder("net.minecrell.pluginyml", typeSpec.build())
+                JavaFile.builder(packageName.getOrElse("net.minecrell.pluginyml"), typeSpec.build())
                     .build()
                     .writeTo(outputSourceDirectory.get().asFile)
             }

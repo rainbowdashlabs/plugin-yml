@@ -44,6 +44,7 @@ class PaperPluginDescription(project: Project) : PluginDescription {
     @Input var main: String? = null
     @Input var generateLibClass: Boolean = false
     @Input var generateReposClass: Boolean = false
+    @Input var generatedPackageName: String? = null
     @Input @Optional var bootstrapper: String? = null
     @Input @Optional var loader: String? = null
     @Input @Optional var description: String? = null
