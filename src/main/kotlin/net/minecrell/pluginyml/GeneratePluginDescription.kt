@@ -60,6 +60,12 @@ abstract class GeneratePluginDescription : DefaultTask() {
     abstract val fileName: Property<String>
 
     @get:Input
+    abstract val generateLibsClass: Property<Boolean>
+
+    @get:Input
+    abstract val generateReposClass: Property<Boolean>
+
+    @get:Input
     @get:Optional
     abstract val librariesRootComponent: Property<ResolvedComponentResult>
 
@@ -94,8 +100,8 @@ abstract class GeneratePluginDescription : DefaultTask() {
         val pluginDescription = pluginDescription.get()
 
         mapper.writeValue(outputResourcesDirectory.file(fileName).get().asFile, pluginDescription)
-        buildDependencies(pluginDescription)
-        buildRepos(pluginDescription)
+        if (generateLibsClass.get()) buildDependencies(pluginDescription)
+        if (generateReposClass.get()) buildRepos(pluginDescription)
     }
 
     private fun buildRepos(pluginDescription: PluginDescription) {

@@ -24,6 +24,7 @@
 
 package net.minecrell.pluginyml
 
+import net.minecrell.pluginyml.paper.PaperPluginDescription
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
@@ -59,8 +60,13 @@ abstract class PlatformPlugin<T : PluginDescription>(private val platformName: S
             val libraries = createConfiguration(this)
 
             // Create task
-            val generateTask = tasks.register<GeneratePluginDescription>("generate${platformName}PluginDescription") {
+            tasks.register<GeneratePluginDescription>("generate${platformName}PluginDescription") {
                 group = "PluginYML"
+                if (description is PaperPluginDescription) {
+                    generateReposClass.set(description.generateReposClass)
+                    generateLibsClass.set(description.generateLibClass)
+                }
+
                 fileName.set(this@PlatformPlugin.fileName)
                 librariesRootComponent.set(libraries?.incoming?.resolutionResult?.root)
                 outputResourcesDirectory.set(generatedResourcesDirectory)
