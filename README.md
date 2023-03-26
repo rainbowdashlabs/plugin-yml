@@ -163,7 +163,7 @@ plugins {
 dependencies {
     // Downloaded from Maven Central when the plugin is loaded
     library 'com.google.code.gson:gson:2.8.7' // All platforms
-    bukkitLibrary 'com.google.code.gson:gson:2.8.7' // Bukkit only
+    paperLibrary 'com.google.code.gson:gson:2.8.7' // Bukkit only
 }
 
 bukkit {
@@ -189,7 +189,11 @@ bukkit {
         // Optional dependency
         dependency("Essentials")
     ]
-    loadBefore = [loader('BrokenPlugin', bootstrap: true)]
+    loadBefore {
+        'BrokenPlugin' {
+            bootstrap: true
+        }
+    }
     prefix = 'TEST'
     defaultPermission = 'OP' // 'TRUE', 'FALSE', 'OP' or 'NOT_OP'
     provides = ['TestPluginOldName', 'TestPlug']
@@ -257,7 +261,11 @@ bukkit {
         dependency("WorldEdit", required = true, boostrap = true),
         // Optional dependency
         dependency("Essentials"))
-    loadBefore = listOf(loader("BrokenPlugin", boostrap = true))
+    loadBefore {
+        register("BrokenPlugin") {
+            bootstrap = true
+        }
+    }
     prefix = "TEST"
     defaultPermission = BukkitPluginDescription.Permission.Default.OP // TRUE, FALSE, OP or NOT_OP
     provides = listOf("TestPluginOldName", "TestPlug")
