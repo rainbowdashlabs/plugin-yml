@@ -58,6 +58,10 @@ class PaperPlugin : PlatformPlugin<PaperPluginDescription>("Paper", "paper-plugi
         if (!VALID_NAME.matches(name)) throw InvalidPluginDescriptionException("Invalid plugin name: should match $VALID_NAME")
 
         if (description.version.isNullOrEmpty()) throw InvalidPluginDescriptionException("Plugin version is not set")
+        description.apiVersion ?: throw InvalidPluginDescriptionException("Plugin API version is not set")
+        description.apiVersion?.let { apiVersion ->
+            if (apiVersion < "1.19") throw InvalidPluginDescriptionException("Plugin API version must be at least 1.19")
+        }
 
         val main = description.main ?: throw InvalidPluginDescriptionException("Main class is not defined")
         if (main.isEmpty()) throw InvalidPluginDescriptionException("Main class cannot be empty")
