@@ -90,6 +90,9 @@ abstract class PlatformPlugin<T : PluginDescription>(private val platformName: S
                     }
                 }
             }
+            tasks.named("processResources").configure {
+                dependsOn("generate${platformName}PluginDescription")
+            }
         }
     }
 
