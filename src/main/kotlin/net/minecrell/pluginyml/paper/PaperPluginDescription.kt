@@ -53,7 +53,7 @@ class PaperPluginDescription(project: Project) : PluginDescription {
     @Input @Optional var prefix: String? = null
     @Input @Optional @JsonProperty("default-permission") var defaultPermission: Permission.Default? = null
     @Input @Optional var provides: List<String>? = null
-    @Input @Optional @JsonIgnore var libraries: List<String>? = null
+    @Input @Optional var libraries: List<String>? = null
 
     @Nested @Optional @JsonProperty("dependencies") @JsonSerialize(converter = PaperNamedDomainObjectCollectionConverter::class)
     var depends: NamedDomainObjectContainer<DependencyDefinition> = project.container(DependencyDefinition::class.java)

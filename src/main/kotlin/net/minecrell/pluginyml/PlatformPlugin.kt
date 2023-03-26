@@ -59,7 +59,7 @@ abstract class PlatformPlugin<T : PluginDescription>(private val platformName: S
             val libraries = createConfiguration(this)
 
             // Create task
-            tasks.register<GeneratePluginDescription>("generate${platformName}PluginDescription") {
+            val generateTask = tasks.register<GeneratePluginDescription>("generate${platformName}PluginDescription") {
                 group = "PluginYML"
                 fileName.set(this@PlatformPlugin.fileName)
                 librariesRootComponent.set(libraries?.incoming?.resolutionResult?.root)
