@@ -52,17 +52,19 @@ abstract class PlatformPlugin<T : PluginDescription>(private val platformName: S
             // Add extension
             extensions.add(platformName.replaceFirstChar(Char::lowercase), description)
 
-            val generatedResourcesDirectory = layout.buildDirectory.dir("generated/plugin-yml/$platformName")
+            val generatedResourcesDirectory = layout.buildDirectory.dir("generated/plugin-yml/$platformName/resources")
+            val generatedSourcesDirectory = layout.buildDirectory.dir("generated/plugin-yml/$platformName/sources")
 
             // Add library configuration
             val libraries = createConfiguration(this)
 
             // Create task
-            val generateTask = tasks.register<GeneratePluginDescription>("generate${platformName}PluginDescription") {
+            tasks.register<GeneratePluginDescription>("generate${platformName}PluginDescription") {
                 group = "PluginYML"
                 fileName.set(this@PlatformPlugin.fileName)
                 librariesRootComponent.set(libraries?.incoming?.resolutionResult?.root)
-                outputDirectory.set(generatedResourcesDirectory)
+                outputResourcesDirectory.set(generatedResourcesDirectory)
+                outputSourceDirectory.set(generatedSourcesDirectory)
                 pluginDescription.set(provider {
                     setDefaults(project, description)
                     description
@@ -73,10 +75,10 @@ abstract class PlatformPlugin<T : PluginDescription>(private val platformName: S
                     validate(description)
                 }
             }
-
             plugins.withType<JavaPlugin> {
                 extensions.getByType<SourceSetContainer>().named(SourceSet.MAIN_SOURCE_SET_NAME) {
-                    resources.srcDir(generateTask)
+                    resources.srcDir(generatedResourcesDirectory)
+                    java.srcDir(generatedSourcesDirectory)
                     if (libraries != null) {
                         configurations.getByName(compileOnlyConfigurationName).extendsFrom(libraries)
                     }

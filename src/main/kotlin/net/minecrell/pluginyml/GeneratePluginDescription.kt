@@ -33,6 +33,10 @@ import com.fasterxml.jackson.databind.util.StdConverter
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import com.squareup.javapoet.JavaFile
+import com.squareup.javapoet.MethodSpec
+import com.squareup.javapoet.TypeSpec
+import net.minecrell.pluginyml.paper.PaperPluginDescription
 import org.gradle.api.DefaultTask
 import org.gradle.api.NamedDomainObjectCollection
 import org.gradle.api.artifacts.result.ResolvedComponentResult
@@ -43,6 +47,7 @@ import org.gradle.api.tasks.Nested
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
+import javax.lang.model.element.Modifier
 
 abstract class GeneratePluginDescription : DefaultTask() {
 
@@ -57,7 +62,10 @@ abstract class GeneratePluginDescription : DefaultTask() {
     abstract val pluginDescription: Property<PluginDescription>
 
     @get:OutputDirectory
-    abstract val outputDirectory: DirectoryProperty
+    abstract val outputResourcesDirectory: DirectoryProperty
+
+    @get:OutputDirectory
+    abstract val outputSourceDirectory: DirectoryProperty
 
     @TaskAction
     fun generate() {
@@ -74,8 +82,38 @@ abstract class GeneratePluginDescription : DefaultTask() {
             .registerKotlinModule()
             .registerModule(module)
             .setSerializationInclusion(JsonInclude.Include.NON_EMPTY)
+        val pluginDescription = pluginDescription.get()
 
-        mapper.writeValue(outputDirectory.file(fileName).get().asFile, pluginDescription.get())
+        mapper.writeValue(outputResourcesDirectory.file(fileName).get().asFile, pluginDescription)
+        if (pluginDescription is PaperPluginDescription && pluginDescription.libraries != null) {
+            pluginDescription.libraries!!.toList().let { libs ->
+                if (libs.isEmpty()) return@let
+                var typeSpec = TypeSpec.enumBuilder("Libraries")
+                typeSpec.addModifiers(Modifier.PUBLIC)
+                libs.forEach {
+                    val group = it.substringBefore(':')
+                    val version = it.substringAfterLast(':')
+                    val name = it.substringAfter(':').substringBefore(':')
+                    typeSpec = typeSpec.addEnumConstant(name.uppercase(), TypeSpec.anonymousClassBuilder("\$S","$group:$name:$version").build())
+                }
+                typeSpec.addField(String::class.java, "value", Modifier.PRIVATE, Modifier.FINAL)
+                typeSpec.addMethod(
+                        MethodSpec.constructorBuilder()
+                        .addParameter(String::class.java, "value")
+                        .addStatement("this.\$N = \$N", "value", "value")
+                        .build())
+                typeSpec.addMethod(
+                        MethodSpec.methodBuilder("getValue")
+                        .addModifiers(Modifier.PUBLIC)
+                        .returns(String::class.java)
+                        .addStatement("return this.value")
+                        .build())
+                JavaFile.builder("net.minecrell.pluginyml", typeSpec.build())
+                    .build()
+                    .writeTo(outputSourceDirectory.get().asFile)
+            }
+
+        }
     }
 
     object NamedDomainObjectCollectionConverter : StdConverter<NamedDomainObjectCollection<Any>, Map<String, Any>>()  {
