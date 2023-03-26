@@ -33,8 +33,10 @@ import org.gradle.api.plugins.JavaPlugin
 import org.gradle.kotlin.dsl.register
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceSetContainer
+import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.withType
+import org.gradle.language.jvm.tasks.ProcessResources
 
 abstract class PlatformPlugin<T : PluginDescription>(private val platformName: String, private val fileName: String) : Plugin<Project> {
 
@@ -60,7 +62,7 @@ abstract class PlatformPlugin<T : PluginDescription>(private val platformName: S
             val libraries = createConfiguration(this)
 
             // Create task
-            tasks.register<GeneratePluginDescription>("generate${platformName}PluginDescription") {
+            val task = tasks.register<GeneratePluginDescription>("generate${platformName}PluginDescription") {
                 group = "PluginYML"
                 if (description is PaperPluginDescription) {
                     generateReposClass.set(description.generateReposClass)
@@ -81,6 +83,12 @@ abstract class PlatformPlugin<T : PluginDescription>(private val platformName: S
                     validate(description)
                 }
             }
+            tasks.withType(JavaCompile::class.java) {
+                dependsOn(task)
+            }
+            tasks.withType(ProcessResources::class.java) {
+                dependsOn(task)
+            }
             plugins.withType<JavaPlugin> {
                 extensions.getByType<SourceSetContainer>().named(SourceSet.MAIN_SOURCE_SET_NAME) {
                     resources.srcDir(generatedResourcesDirectory)
@@ -90,9 +98,7 @@ abstract class PlatformPlugin<T : PluginDescription>(private val platformName: S
                     }
                 }
             }
-            tasks.named("processResources").configure {
-                dependsOn("generate${platformName}PluginDescription")
-            }
+
         }
     }
 
