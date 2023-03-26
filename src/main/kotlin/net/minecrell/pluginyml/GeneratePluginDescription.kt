@@ -90,7 +90,8 @@ abstract class GeneratePluginDescription : DefaultTask() {
                 if (libs.isEmpty()) return@let
                 var typeSpec = TypeSpec.enumBuilder("Libraries")
                 typeSpec.addModifiers(Modifier.PUBLIC)
-                libs.forEach {
+                libs.forEach { it ->
+                    if (it.count { it == ':' } != 3 ) return@forEach
                     val group = it.substringBefore(':')
                     val version = it.substringAfterLast(':')
                     val name = it.substringAfter(':').substringBefore(':')
