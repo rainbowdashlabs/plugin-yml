@@ -91,7 +91,7 @@ abstract class GeneratePluginDescription : DefaultTask() {
                 var typeSpec = TypeSpec.enumBuilder("Libraries")
                 typeSpec.addModifiers(Modifier.PUBLIC)
                 libs.forEach { it ->
-                    if (it.count { it == ':' } != 3 ) return@forEach
+                    if (it.count { it == ':' } != 2) throw IllegalArgumentException("Invalid library: $it")
                     val group = it.substringBefore(':')
                     val version = it.substringAfterLast(':')
                     val name = it.substringAfter(':').substringBefore(':')
