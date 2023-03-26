@@ -74,15 +74,15 @@ class PaperPlugin : PlatformPlugin<PaperPluginDescription>("Paper", "paper-plugi
             }
         }
 
-        for (before in description.loadBefore?: emptyList()) {
+        for (before in description.loadBefore) {
             if (before.name.isEmpty()) throw InvalidPluginDescriptionException("Plugin name in loadBefore can not be empty")
         }
 
-        for (after in description.loadAfter?: emptyList()) {
+        for (after in description.loadAfter) {
             if (after.name.isEmpty()) throw InvalidPluginDescriptionException("Plugin name in loadAfter can not be empty")
         }
 
-        for (depend in description.dependencies?: emptyList()) {
+        for (depend in description.dependencies) {
             if (depend.name.isEmpty()) throw InvalidPluginDescriptionException("Plugin name in depends can not be empty")
         }
 
