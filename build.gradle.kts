@@ -24,6 +24,7 @@ gradlePlugin {
 
     plugins {
         register("bukkit") {
+            group = "Plugin YAML"
             id = "net.minecrell.plugin-yml.bukkit"
             displayName = "plugin-yml (Bukkit)"
             description = "Generate plugin.yml for Bukkit plugins based on the Gradle project"
@@ -31,6 +32,7 @@ gradlePlugin {
             tags.set(listOf("bukkit"))
         }
         register("bungee") {
+            group = "Plugin YAML"
             id = "net.minecrell.plugin-yml.bungee"
             displayName = "plugin-yml (BungeeCord)"
             description = "Generate bungee.yml for BungeeCord plugins based on the Gradle project"
@@ -38,6 +40,7 @@ gradlePlugin {
             tags.set(listOf("bungee"))
         }
         register("nukkit") {
+            group = "Plugin YAML"
             id = "net.minecrell.plugin-yml.nukkit"
             displayName = "plugin-yml (Nukkit)"
             description = "Generate nukkit.yml for Nukkit plugins based on the Gradle project"
@@ -45,6 +48,7 @@ gradlePlugin {
             tags.set(listOf("nukkit"))
         }
         register("paper") {
+            group = "Plugin YAML"
             id = "net.minecrell.plugin-yml.paper"
             displayName = "plugin-yml (Paper)"
             description = "Generate paper-plugin.yml for Paper plugins based on the Gradle project"
