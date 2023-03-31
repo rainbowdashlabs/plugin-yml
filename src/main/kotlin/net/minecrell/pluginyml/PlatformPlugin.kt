@@ -57,7 +57,6 @@ abstract class PlatformPlugin<T : PluginDescription>(private val platformName: S
             extensions.add(platformName.replaceFirstChar(Char::lowercase), description)
 
             val generatedResourcesDirectory = layout.buildDirectory.dir("generated/plugin-yml/$platformName/resources")
-            val generatedSourcesDirectory = layout.buildDirectory.dir("generated/plugin-yml/$platformName/sources")
 
             // Add library configuration
             val libraries = createConfiguration(this)
@@ -66,15 +65,12 @@ abstract class PlatformPlugin<T : PluginDescription>(private val platformName: S
             val task = tasks.register<GeneratePluginDescription>("generate${platformName}PluginDescription") {
                 group = "PluginYML"
                 if (description is PaperPluginDescription) {
-                    generateReposClass.set(description.generateReposClass)
-                    generateLibsClass.set(description.generateLibClass)
-                    packageName.set(description.generatedPackageName)
+                    generatePluginLibraries.set(description.generatePluginLibraries)
                 }
 
                 fileName.set(this@PlatformPlugin.fileName)
                 librariesRootComponent.set(libraries?.incoming?.resolutionResult?.root)
                 outputResourcesDirectory.set(generatedResourcesDirectory)
-                outputSourceDirectory.set(generatedSourcesDirectory)
                 pluginDescription.set(provider {
                     setDefaults(project, description)
                     description
@@ -97,7 +93,6 @@ abstract class PlatformPlugin<T : PluginDescription>(private val platformName: S
             plugins.withType<JavaPlugin> {
                 extensions.getByType<SourceSetContainer>().named(SourceSet.MAIN_SOURCE_SET_NAME) {
                     resources.srcDir(generatedResourcesDirectory)
-                    java.srcDir(generatedSourcesDirectory)
                     if (libraries != null) {
                         configurations.getByName(compileOnlyConfigurationName).extendsFrom(libraries)
                     }
