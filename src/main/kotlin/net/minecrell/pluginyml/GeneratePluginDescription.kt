@@ -33,7 +33,6 @@ import com.fasterxml.jackson.databind.util.StdConverter
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
-import com.squareup.javapoet.TypeSpec
 import net.minecrell.pluginyml.paper.PaperPluginDescription
 import org.gradle.api.DefaultTask
 import org.gradle.api.NamedDomainObjectCollection
@@ -94,8 +93,6 @@ abstract class GeneratePluginDescription : DefaultTask() {
 
     private fun buildPluginLibraries(pluginDescription: PluginDescription) {
         if (pluginDescription is PaperPluginDescription) {
-            var typeSpec = TypeSpec.enumBuilder("Repos")
-            typeSpec.addModifiers(Modifier.PUBLIC)
             val repos = this.project.repositories.filterIsInstance<MavenArtifactRepository>().map { it.url.toString() }.toList()
             val dependencies = pluginDescription.libraries!!.toList()
             val pluginLibraries = PluginLibraries(repos, dependencies)
