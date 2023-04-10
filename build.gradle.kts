@@ -1,4 +1,5 @@
 plugins {
+    `maven-publish`
     `java-gradle-plugin`
     `kotlin-dsl`
     id("com.gradle.plugin-publish") version "1.1.0"
@@ -16,6 +17,35 @@ dependencies {
         exclude(group = "org.jetbrains.kotlin")
     }
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.14.2")
+}
+
+publishing {
+    repositories {
+        maven {
+            group = project.group as String
+            authentication {
+                credentials(PasswordCredentials::class) {
+                    username = System.getenv("NEXUS_USERNAME")
+                    password = System.getenv("NEXUS_PASSWORD")
+                }
+            }
+
+            val branch = System.getenv("GITHUB_REF")?.replace("refs/heads/", "") ?: ""
+
+            url = uri(when (branch) {
+                "main", "master" -> "https://eldonexus.de/repository/maven-releases/"
+                "dev" -> "https://eldonexus.de/repository/maven-dev/"
+                else -> "https://eldonexus.de/repository/maven-snapshots/"
+            })
+
+            version = when (branch) {
+                "main", "master" -> version
+                "dev" -> version.toString().plus("-DEV")
+                else -> version.toString().plus("-SNAPSHOT")
+            }
+            name = "EldoNexus"
+        }
+    }
 }
 
 gradlePlugin {
