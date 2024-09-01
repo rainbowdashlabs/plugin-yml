@@ -24,28 +24,28 @@ gradlePlugin {
 
     plugins {
         register("bukkit") {
-            id = "net.minecrell.plugin-yml.bukkit"
+            id = "de.eldoria.plugin-yml.bukkit"
             displayName = "plugin-yml (Bukkit)"
             description = "Generate plugin.yml for Bukkit plugins based on the Gradle project"
             implementationClass = "net.minecrell.pluginyml.bukkit.BukkitPlugin"
             tags.set(listOf("bukkit"))
         }
         register("bungee") {
-            id = "net.minecrell.plugin-yml.bungee"
+            id = "de.eldoria.plugin-yml.bungee"
             displayName = "plugin-yml (BungeeCord)"
             description = "Generate bungee.yml for BungeeCord plugins based on the Gradle project"
             implementationClass = "net.minecrell.pluginyml.bungee.BungeePlugin"
             tags.set(listOf("bungee"))
         }
         register("nukkit") {
-            id = "net.minecrell.plugin-yml.nukkit"
+            id = "de.eldoria.plugin-yml.nukkit"
             displayName = "plugin-yml (Nukkit)"
             description = "Generate nukkit.yml for Nukkit plugins based on the Gradle project"
             implementationClass = "net.minecrell.pluginyml.nukkit.NukkitPlugin"
             tags.set(listOf("nukkit"))
         }
         register("paper") {
-            id = "net.minecrell.plugin-yml.paper"
+            id = "de.eldoria.plugin-yml.paper"
             displayName = "plugin-yml (Paper)"
             description = "Generate paper-plugin.yml for Paper plugins based on the Gradle project"
             implementationClass = "net.minecrell.pluginyml.paper.PaperPlugin"
