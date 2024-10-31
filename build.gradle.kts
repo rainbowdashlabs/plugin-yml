@@ -1,8 +1,8 @@
 plugins {
     `java-gradle-plugin`
     `kotlin-dsl`
-    id("com.gradle.plugin-publish") version "1.2.1"
-    id("com.diffplug.spotless") version "6.18.0"
+    id("com.gradle.plugin-publish") version "1.3.0"
+    id("com.diffplug.spotless") version "6.25.0"
 }
 
 val url: String by extra
@@ -12,10 +12,10 @@ repositories {
 }
 
 dependencies {
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.2") {
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.18.1") {
         exclude(group = "org.jetbrains.kotlin")
     }
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.15.2")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.18.1")
 }
 
 spotless {
