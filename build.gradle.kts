@@ -1,7 +1,7 @@
 plugins {
     `java-gradle-plugin`
     `kotlin-dsl`
-    id("com.gradle.plugin-publish") version "1.2.0"
+    id("com.gradle.plugin-publish") version "1.2.1"
     id("org.cadixdev.licenser") version "0.6.1"
 }
 
@@ -19,8 +19,8 @@ dependencies {
 }
 
 gradlePlugin {
-    website.set(url)
-    vcsUrl.set(url)
+    website = url
+    vcsUrl = url
 
     plugins {
         register("bukkit") {
@@ -28,28 +28,28 @@ gradlePlugin {
             displayName = "plugin-yml (Bukkit)"
             description = "Generate plugin.yml for Bukkit plugins based on the Gradle project"
             implementationClass = "net.minecrell.pluginyml.bukkit.BukkitPlugin"
-            tags.set(listOf("bukkit"))
+            tags = listOf("bukkit")
         }
         register("bungee") {
             id = "de.eldoria.plugin-yml.bungee"
             displayName = "plugin-yml (BungeeCord)"
             description = "Generate bungee.yml for BungeeCord plugins based on the Gradle project"
             implementationClass = "net.minecrell.pluginyml.bungee.BungeePlugin"
-            tags.set(listOf("bungee"))
+            tags = listOf("bungee")
         }
         register("nukkit") {
             id = "de.eldoria.plugin-yml.nukkit"
             displayName = "plugin-yml (Nukkit)"
             description = "Generate nukkit.yml for Nukkit plugins based on the Gradle project"
             implementationClass = "net.minecrell.pluginyml.nukkit.NukkitPlugin"
-            tags.set(listOf("nukkit"))
+            tags = listOf("nukkit")
         }
         register("paper") {
             id = "de.eldoria.plugin-yml.paper"
             displayName = "plugin-yml (Paper)"
             description = "Generate paper-plugin.yml for Paper plugins based on the Gradle project"
             implementationClass = "net.minecrell.pluginyml.paper.PaperPlugin"
-            tags.set(listOf("paper"))
+            tags = listOf("paper")
         }
     }
 }
