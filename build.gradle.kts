@@ -2,7 +2,7 @@ plugins {
     `java-gradle-plugin`
     `kotlin-dsl`
     id("com.gradle.plugin-publish") version "1.2.1"
-    id("org.cadixdev.licenser") version "0.6.1"
+    id("com.diffplug.spotless") version "6.18.0"
 }
 
 val url: String by extra
@@ -16,6 +16,15 @@ dependencies {
         exclude(group = "org.jetbrains.kotlin")
     }
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.15.2")
+}
+
+spotless {
+    kotlin{
+        licenseHeaderFile(rootProject.file("HEADER.txt"))
+    }
+    java {
+        target("**/*.java")
+    }
 }
 
 gradlePlugin {
